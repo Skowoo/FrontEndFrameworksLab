@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Vue basics</title>
+
+  <style></style>
+
+</head>
+
+
+
+<body>
+
+  <div id="app">
+
+    <p>{{ displayTime }}</p>
+
+  </div>
+
+
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <script>
+
+    const vm = Vue.createApp({
+
+      created() {
+
+        this.timerId = setInterval(() => this.setTime(), 1000);
+
+      },
+
+      data() {
+
+        return {
+
+          timerId: null,
+
+          hh: "00",
+
+          mm: "00",
+
+          ss: "00",
+
+        };
+
+      },
+
+      computed: {
+
+        displayTime() {
+
+          return `${this.hh}:${this.mm}:${this.ss}`;
+
+        }
+
+      },
+
+      methods: {
+
+        setTime() {
+
+          const date = new Date();
+
+          this.hh = `${this.formatTimePart(date.getHours())}`;
+
+          this.mm = `${this.formatTimePart(date.getMinutes())}`;
+
+          this.ss = `${this.formatTimePart(date.getSeconds())}`;
+
+        },
+
+        getTime() {
+
+          return `${this.hh}:${this.mm}:${this.ss}`;
+
+        },
+
+        formatTimePart(num) {
+
+          return `00${num}`.slice(-2);
+
+        }
+
+      },
+
+      unmouted() {
+
+        clearInterval(this.timerId);
+
+      }
+
+    }).mount("#app");
+
+
+
+    // podzielić na cześci:
+
+    // 1. Montowanie instancji + wyświetlanie wartości (interpolacja)
+
+    // 2. Zewnętrzne modyfikowanie modelu spoza instancji (setInterval): schemat model (object) => szablon / widok => render
+
+    // 3. Multiplikowanie instancji
+
+    // 4. Ćwiczenie: Modyfikowanie modelu po kliknięciu
+
+  </script>
+
+</body>
+
+
+
+</html>
