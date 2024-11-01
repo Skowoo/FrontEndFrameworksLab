@@ -11,15 +11,19 @@
     <table class="table">
       <thead>
         <tr>
-          <th v-for="(value, key) in arr[0]">
+          <th v-for="(value, key) in arr[0]" :key="key">
             {{ key }}
           </th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in arr">
-          <td v-for="value in item">
+        <tr v-for="(item, index) in arr" :key="index">
+          <td v-for="value in item" :key="value">
             {{ value }}
+          </td>
+          <td>
+            <button @click="deleteRow(index)">Delete</button>
           </td>
         </tr>
       </tbody>
