@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Vue templates - if</title>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="app"
+      v-cloak
+    ></div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      // Exercise:
+      // Keyboard master "game"
+      // 1. Generate random letter and wait for user click
+      // 2. Register time (ms) from letter apperance to user clicked proper letter.
+      // 3. Display elapsed time and store result to data
+      // 4. Restart the game after 3 seconds (showing 3..2..1)
+      // 5. Record 5 rounds and display result as: total time, max min and avg.
+
+      const vm = Vue.createApp({
+        created() {},
+        data() {},
+        computed: {},
+        methods: {},
+      }).mount("#app");
+    </script>
+  </body>
+</html>

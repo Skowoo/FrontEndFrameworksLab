@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue templates - v-for</title>
+  </head>
+
+  <body>
+    <!-- https://vuejs.org/guide/essentials/list.html  -->
+    <div id="app">
+      <ul v-if="items.length > 0">
+        <li v-for="(item, idx) in items" :key="id">
+          <span style="color: red">{{ item.first_name }}</span>
+          {{ item.last_name }}
+        </li>
+      </ul>
+      <div>{{ items[0] }}</div>
+      <div>
+        <p v-for="(col, key) in items[0]">{{ key }} = {{ col }}</p>
+      </div>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const vm = Vue.createApp({
+        data() {
+          return {
+            items: getItems(),
+          };
+        },
+      }).mount("#app");
+
+      function getItems() {
+        return [
+          {
+            id: 1,
+            first_name: "Davon",
+            last_name: "Reggler",
+            email: "dreggler0@dmoz.org",
+            gender: "Male",
+            ip_address: "82.250.33.58",
+          },
+          {
+            id: 2,
+            first_name: "Tamar",
+            last_name: "Kleinhandler",
+            email: "tkleinhandler1@a8.net",
+            gender: "Female",
+            ip_address: "13.119.236.103",
+          },
+          {
+            id: 3,
+            first_name: "Hayyim",
+            last_name: "Knowler",
+            email: "hknowler2@spotify.com",
+            gender: "Male",
+            ip_address: "41.220.18.156",
+          },
+          {
+            id: 4,
+            first_name: "Camey",
+            last_name: "Cressy",
+            email: "ccressy3@who.int",
+            gender: "Male",
+            ip_address: "235.30.210.172",
+          },
+          {
+            id: 5,
+            first_name: "Adrien",
+            last_name: "Slocombe",
+            email: "aslocombe4@cpanel.net",
+            gender: "Male",
+            ip_address: "213.138.69.139",
+          },
+          {
+            id: 6,
+            first_name: "Blondie",
+            last_name: "Delamaine",
+            email: "bdelamaine5@diigo.com",
+            gender: "Genderfluid",
+            ip_address: "138.68.59.105",
+          },
+          {
+            id: 7,
+            first_name: "Krishnah",
+            last_name: "Klimas",
+            email: "kklimas6@mozilla.org",
+            gender: "Male",
+            ip_address: "55.84.32.44",
+          },
+          {
+            id: 8,
+            first_name: "Serene",
+            last_name: "Trulock",
+            email: "strulock7@cnet.com",
+            gender: "Female",
+            ip_address: "97.132.29.73",
+          },
+          {
+            id: 9,
+            first_name: "Eva",
+            last_name: "Miguet",
+            email: "emiguet8@barnesandnoble.com",
+            gender: "Female",
+            ip_address: "45.82.156.90",
+          },
+          {
+            id: 10,
+            first_name: "Leela",
+            last_name: "Bartalini",
+            email: "lbartalini9@twitpic.com",
+            gender: "Female",
+            ip_address: "118.234.40.154",
+          },
+        ];
+      }
+    </script>
+  </body>
+</html>
