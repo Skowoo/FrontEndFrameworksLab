@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue templates - v-for</title>
+    <style>
+      #app {
+        &[v-cloak] {
+          display: none;
+        }
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        padding: 2rem;
+      }
+    </style>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th v-for="col in columns">{{ col }}</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(row, idx) in items">
+              <td>{{ idx + 1 }}.</td>
+              <td v-for="cell in row">{{ cell }}</td>
+              <td>
+                <button class="btn btn-danger" @click="deleteRow(idx)">
+                  DELETE
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      // Exercise:
+      // Display data in table
+      // 1. Use https://www.mockaroo.com/ to generate sample records (50 rows)
+      // 2. Use boostrap table and redner above data to table
+      // 3. [BONUS] Add action column with "Delete" button that will remove proper row
+      // 4. [BONUS] Add buttons to toggle columns visibility
+      // 5. [BONUS] Add live text filter for table data
+      const vm = Vue.createApp({
+        data() {
+          return {
+            items: getMockupData(),
+          };
+        },
+        computed: {
+          columns() {
+            return Object.keys(this.items[0]);
+          },
+        },
+        methods: {
+          deleteRow(idx) {
+            if (confirm("Are you sure?")) {
+              this.items.splice(idx, 1);
+            }
+          },
+        },
+      }).mount("#app");
+
+      function getMockupData() {
+        return [
+          {
+            movie_title: "Taking of Pelham One Two Three, The",
+            genre: "Comedy",
+            release_date: "2004-05-30T14:02:48Z",
+            director: "Ruthie Comelini",
+            actor: "Jareb Bitchener",
+            rating: 2.1,
+            duration_minutes: 204,
+            budget: "Rupiah",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.\n\nCurabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.\n\nInteger tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.",
+          },
+          {
+            movie_title: "Guns of the Magnificent Seven",
+            genre: "Drama",
+            release_date: "2007-07-07T13:51:58Z",
+            director: "Vaclav Satford",
+            actor: "Cullen Burkman",
+            rating: 5.2,
+            duration_minutes: 158,
+            budget: "Ruble",
+            box_office_revenue: "Peso",
+            description:
+              "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.",
+          },
+          {
+            movie_title: "Muertos, Los",
+            genre: "Drama",
+            release_date: "2009-01-09T21:49:43Z",
+            director: "Chas Antao",
+            actor: "Oralle Legerton",
+            rating: 2.6,
+            duration_minutes: 205,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Rupee",
+            description:
+              "Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.\n\nCurabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.",
+          },
+          {
+            movie_title: "Deliver Us from Evil",
+            genre: "Horror",
+            release_date: "2016-09-21T12:22:03Z",
+            director: "Donnamarie Crompton",
+            actor: "Hanni Batchellor",
+            rating: 4.0,
+            duration_minutes: 188,
+            budget: "Peso",
+            box_office_revenue: "Dong",
+            description:
+              "Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.\n\nDuis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.\n\nDonec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.",
+          },
+          {
+            movie_title: "Return of the Living Dead 3",
+            genre: "Action",
+            release_date: "2000-04-26T11:27:16Z",
+            director: "Ramsey Farnill",
+            actor: "Hyacinth Gosforth",
+            rating: 7.4,
+            duration_minutes: 78,
+            budget: "Ruble",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.",
+          },
+          {
+            movie_title: "Accused (Anklaget)",
+            genre: "Action",
+            release_date: "2013-04-14T20:41:45Z",
+            director: "Brigitte Breckin",
+            actor: "Carlota Etty",
+            rating: 1.5,
+            duration_minutes: 210,
+            budget: "Real",
+            box_office_revenue: "Euro",
+            description:
+              "Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.\n\nFusce consequat. Nulla nisl. Nunc nisl.",
+          },
+          {
+            movie_title: "Toe to Toe",
+            genre: "Horror",
+            release_date: "2013-07-31T19:01:26Z",
+            director: "Alfons Eick",
+            actor: "Jobie Gilliat",
+            rating: 3.1,
+            duration_minutes: 170,
+            budget: "Dollar",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.",
+          },
+          {
+            movie_title: "Rushmore",
+            genre: "Romance",
+            release_date: "2016-04-09T01:13:00Z",
+            director: "Trisha Olrenshaw",
+            actor: "Friederike Harman",
+            rating: 8.3,
+            duration_minutes: 79,
+            budget: "Euro",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.\n\nInteger ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.",
+          },
+          {
+            movie_title: "3 Ninjas: High Noon On Mega Mountain",
+            genre: "Romance",
+            release_date: "2005-06-22T23:46:47Z",
+            director: "Nikolas Mannakee",
+            actor: "Ryley Hosburn",
+            rating: 4.7,
+            duration_minutes: 233,
+            budget: "Rupee",
+            box_office_revenue: "Franc",
+            description:
+              "Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.\n\nFusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.",
+          },
+          {
+            movie_title: "Moine, Le (Monk, The)",
+            genre: "Horror",
+            release_date: "2022-11-02T05:03:06Z",
+            director: "Samuel Aysh",
+            actor: "Joelie Battaille",
+            rating: 6.8,
+            duration_minutes: 206,
+            budget: "Rupiah",
+            box_office_revenue: "Hryvnia",
+            description:
+              "Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.\n\nMaecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.\n\nNullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.",
+          },
+          {
+            movie_title: "Alexander the Great",
+            genre: "Romance",
+            release_date: "2018-08-23T06:39:49Z",
+            director: "Angel Castanaga",
+            actor: "Scottie McCritichie",
+            rating: 9.3,
+            duration_minutes: 69,
+            budget: "Rupiah",
+            box_office_revenue: "Tugrik",
+            description:
+              "Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.\n\nIn sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.\n\nSuspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.",
+          },
+          {
+            movie_title: "Rockin' in the Rockies",
+            genre: "Action",
+            release_date: "2003-06-08T09:47:24Z",
+            director: "Kimberlee Palfreeman",
+            actor: "Hewet Grigsby",
+            rating: 6.6,
+            duration_minutes: 209,
+            budget: "Rupiah",
+            box_office_revenue: "Krona",
+            description:
+              "Phasellus in felis. Donec semper sapien a libero. Nam dui.",
+          },
+          {
+            movie_title: "Stefano Quantestorie",
+            genre: "Horror",
+            release_date: "2003-09-14T08:23:08Z",
+            director: "Codie Winspur",
+            actor: "Millie Shemwell",
+            rating: 6.3,
+            duration_minutes: 114,
+            budget: "Yen",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "In congue. Etiam justo. Etiam pretium iaculis justo.\n\nIn hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.\n\nNulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.",
+          },
+          {
+            movie_title: "Shivers (They Came from Within)",
+            genre: "Horror",
+            release_date: "2002-09-27T19:40:52Z",
+            director: "Lewie Jansens",
+            actor: "Dolli Fifoot",
+            rating: 2.0,
+            duration_minutes: 206,
+            budget: "Rupiah",
+            box_office_revenue: "Yuan Renminbi",
+            description: "Fusce consequat. Nulla nisl. Nunc nisl.",
+          },
+          {
+            movie_title: "Mishen (Target)",
+            genre: "Comedy",
+            release_date: "2019-04-18T23:29:20Z",
+            director: "Winn Dickings",
+            actor: "Osbert Samwaye",
+            rating: 2.5,
+            duration_minutes: 113,
+            budget: "Euro",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.",
+          },
+          {
+            movie_title: "Fun with Dick and Jane",
+            genre: "Romance",
+            release_date: "2009-09-07T13:50:50Z",
+            director: "Clary Duran",
+            actor: "Nicolis Stein",
+            rating: 4.1,
+            duration_minutes: 145,
+            budget: "Franc",
+            box_office_revenue: "Kip",
+            description:
+              "Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.\n\nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\n\nMorbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.",
+          },
+          {
+            movie_title:
+              "Pornographers, The (Erogotoshi-tachi yori: Jinruigaku nyûmon)",
+            genre: "Drama",
+            release_date: "2022-02-04T09:59:54Z",
+            director: "Nathalie Ismead",
+            actor: "Perri Gratton",
+            rating: 5.8,
+            duration_minutes: 239,
+            budget: "Peso",
+            box_office_revenue: "Peso",
+            description:
+              "Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.\n\nQuisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.",
+          },
+          {
+            movie_title: "Ninja, A Band of Assassins (Shinobi No Mono)",
+            genre: "Comedy",
+            release_date: "2014-01-22T01:42:06Z",
+            director: "Albie Kleingrub",
+            actor: "Coleen Hynson",
+            rating: 6.0,
+            duration_minutes: 200,
+            budget: "Peso",
+            box_office_revenue: "Rupiah",
+            description:
+              "Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.\n\nFusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\n\nSed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.",
+          },
+          {
+            movie_title: "Footlight Parade",
+            genre: "Horror",
+            release_date: "2008-12-26T07:34:17Z",
+            director: "Sybila Bagnal",
+            actor: "Roshelle Bosward",
+            rating: 4.2,
+            duration_minutes: 221,
+            budget: "Hryvnia",
+            box_office_revenue: "Peso",
+            description:
+              "Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.",
+          },
+          {
+            movie_title: "Next",
+            genre: "Drama",
+            release_date: "2009-12-12T06:46:24Z",
+            director: "Matthieu Bails",
+            actor: "Dacie McLanaghan",
+            rating: 8.7,
+            duration_minutes: 171,
+            budget: "Rupiah",
+            box_office_revenue: "Dollar",
+            description:
+              "Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.",
+          },
+          {
+            movie_title: "Port of Call (Hamnstad)",
+            genre: "Romance",
+            release_date: "2000-11-01T17:33:55Z",
+            director: "Booth Perschke",
+            actor: "Tommi Seiffert",
+            rating: 7.5,
+            duration_minutes: 192,
+            budget: "Shilling",
+            box_office_revenue: "Lari",
+            description:
+              "Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.",
+          },
+          {
+            movie_title: "Loser Takes All, The (O hamenos ta pairnei ola)",
+            genre: "Comedy",
+            release_date: "2009-08-16T07:39:56Z",
+            director: "Sharia Bridgwater",
+            actor: "Virgil Pullman",
+            rating: 4.2,
+            duration_minutes: 121,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Euro",
+            description:
+              "Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.",
+          },
+          {
+            movie_title: "Moth, The (Cma)",
+            genre: "Comedy",
+            release_date: "2004-07-24T06:14:50Z",
+            director: "Page Hedden",
+            actor: "Mersey Gladdor",
+            rating: 2.5,
+            duration_minutes: 175,
+            budget: "Rupiah",
+            box_office_revenue: "Krona",
+            description:
+              "In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.\n\nMaecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.",
+          },
+          {
+            movie_title: "Scary Movie",
+            genre: "Horror",
+            release_date: "2021-06-18T13:58:11Z",
+            director: "Godiva Le Ball",
+            actor: "Constantin Crossby",
+            rating: 2.5,
+            duration_minutes: 101,
+            budget: "Dollar",
+            box_office_revenue: "Euro",
+            description:
+              "Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\n\nSed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.\n\nPellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.",
+          },
+          {
+            movie_title: "Rare Exports: A Christmas Tale (Rare Exports)",
+            genre: "Drama",
+            release_date: "2017-01-08T05:18:08Z",
+            director: "Dewie Rummery",
+            actor: "Simone Ramalhete",
+            rating: 3.3,
+            duration_minutes: 146,
+            budget: "Euro",
+            box_office_revenue: "Real",
+            description:
+              "In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.",
+          },
+          {
+            movie_title:
+              "Tale of Zatoichi Continues, The (Zoku Zatôichi monogatari) (Zatôichi 2)",
+            genre: "Comedy",
+            release_date: "2010-11-30T16:05:38Z",
+            director: "Aundrea Chape",
+            actor: "Corene Allardyce",
+            rating: 4.3,
+            duration_minutes: 85,
+            budget: "Krona",
+            box_office_revenue: "Rupiah",
+            description:
+              "Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.",
+          },
+          {
+            movie_title: "Twist",
+            genre: "Comedy",
+            release_date: "2016-02-10T21:41:28Z",
+            director: "Aldin Rolston",
+            actor: "Beatrice Gettone",
+            rating: 1.2,
+            duration_minutes: 103,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Ruble",
+            description:
+              "Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.\n\nMaecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.\n\nNullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.",
+          },
+          {
+            movie_title: "Cocoon",
+            genre: "Horror",
+            release_date: "2012-11-15T19:02:18Z",
+            director: "Mona Toke",
+            actor: "Rhodia Pinkerton",
+            rating: 6.7,
+            duration_minutes: 95,
+            budget: "Dirham",
+            box_office_revenue: "Yen",
+            description:
+              "Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.",
+          },
+          {
+            movie_title: "She Hate Me",
+            genre: "Action",
+            release_date: "2001-09-20T07:55:46Z",
+            director: "George Antushev",
+            actor: "Rahel Degli Abbati",
+            rating: 6.8,
+            duration_minutes: 204,
+            budget: "Euro",
+            box_office_revenue: "Krona",
+            description:
+              "Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.\n\nIn congue. Etiam justo. Etiam pretium iaculis justo.",
+          },
+          {
+            movie_title: "Homage",
+            genre: "Comedy",
+            release_date: "2015-12-19T01:42:17Z",
+            director: "Huntley Batham",
+            actor: "Aura Stabler",
+            rating: 7.7,
+            duration_minutes: 133,
+            budget: "Koruna",
+            box_office_revenue: "Koruna",
+            description:
+              "Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.",
+          },
+          {
+            movie_title: "Poolsite",
+            genre: "Drama",
+            release_date: "2014-05-31T10:35:56Z",
+            director: "Elna Apfel",
+            actor: "Elladine Southway",
+            rating: 2.9,
+            duration_minutes: 153,
+            budget: "Peso",
+            box_office_revenue: "Ruble",
+            description:
+              "Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.\n\nPellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.",
+          },
+          {
+            movie_title: "Strange Circus (Kimyô na sâkasu)",
+            genre: "Horror",
+            release_date: "2020-03-14T11:09:51Z",
+            director: "Ellette Purnell",
+            actor: "Greer MacCarter",
+            rating: 6.8,
+            duration_minutes: 143,
+            budget: "Ruble",
+            box_office_revenue: "Shilling",
+            description:
+              "Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.\n\nPellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.",
+          },
+          {
+            movie_title: "Nora's Will (Cinco días sin Nora)",
+            genre: "Action",
+            release_date: "2021-05-25T03:31:07Z",
+            director: "Bartram Pawfoot",
+            actor: "Raymund Rau",
+            rating: 10.0,
+            duration_minutes: 170,
+            budget: "Real",
+            box_office_revenue: "Rial",
+            description:
+              "Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.\n\nNullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.",
+          },
+          {
+            movie_title: "Without Warning",
+            genre: "Drama",
+            release_date: "2013-04-11T11:36:17Z",
+            director: "Roseline Shanks",
+            actor: "Berti Lanchbury",
+            rating: 8.7,
+            duration_minutes: 228,
+            budget: "Kwanza",
+            box_office_revenue: "Baht",
+            description:
+              "Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.\n\nInteger tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.\n\nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.",
+          },
+          {
+            movie_title: "Beyond a Reasonable Doubt",
+            genre: "Action",
+            release_date: "2008-03-19T00:23:00Z",
+            director: "Leanor Tallach",
+            actor: "Perla Willacot",
+            rating: 2.1,
+            duration_minutes: 206,
+            budget: "Dinar",
+            box_office_revenue: "Franc",
+            description:
+              "Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\n\nSed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.\n\nPellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.",
+          },
+          {
+            movie_title: "Porky's II: The Next Day",
+            genre: "Comedy",
+            release_date: "2019-04-29T05:32:54Z",
+            director: "Bob Brislen",
+            actor: "Jillana Buttel",
+            rating: 9.5,
+            duration_minutes: 72,
+            budget: "Real",
+            box_office_revenue: "Zloty",
+            description:
+              "In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.\n\nNulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.",
+          },
+          {
+            movie_title: "Something Wicked This Way Comes",
+            genre: "Comedy",
+            release_date: "2022-02-05T07:58:48Z",
+            director: "Jeno Synnott",
+            actor: "Doloritas Pilmer",
+            rating: 9.4,
+            duration_minutes: 188,
+            budget: "Peso",
+            box_office_revenue: "Dollar",
+            description:
+              "Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.",
+          },
+          {
+            movie_title: "Desire Under the Elms",
+            genre: "Comedy",
+            release_date: "2011-03-29T11:41:46Z",
+            director: "Betsy Wringe",
+            actor: "Holli Keates",
+            rating: 8.9,
+            duration_minutes: 167,
+            budget: "Rupee",
+            box_office_revenue: "Peso",
+            description: "Fusce consequat. Nulla nisl. Nunc nisl.",
+          },
+          {
+            movie_title: "Rembrandt",
+            genre: "Comedy",
+            release_date: "2019-06-28T16:30:26Z",
+            director: "Ari Fossitt",
+            actor: "Krishna Artiss",
+            rating: 6.7,
+            duration_minutes: 100,
+            budget: "Peso",
+            box_office_revenue: "Dollar",
+            description:
+              "Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.",
+          },
+          {
+            movie_title: "Private Resort",
+            genre: "Romance",
+            release_date: "2020-09-05T21:45:05Z",
+            director: "Jarrid Prue",
+            actor: "Sheelah Pattingson",
+            rating: 8.9,
+            duration_minutes: 81,
+            budget: "Rupiah",
+            box_office_revenue: "Ruble",
+            description:
+              "Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.",
+          },
+          {
+            movie_title: "Sex and the City 2",
+            genre: "Romance",
+            release_date: "2022-08-21T07:29:52Z",
+            director: "Aymer Drayson",
+            actor: "Abdul Hearfield",
+            rating: 3.4,
+            duration_minutes: 144,
+            budget: "Hryvnia",
+            box_office_revenue: "Ruble",
+            description:
+              "Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.",
+          },
+          {
+            movie_title: "Wedding Trough (Vase de noces)",
+            genre: "Drama",
+            release_date: "2017-03-26T22:24:50Z",
+            director: "Wenona Shernock",
+            actor: "Gerti Izakson",
+            rating: 7.5,
+            duration_minutes: 153,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Euro",
+            description:
+              "Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.",
+          },
+          {
+            movie_title: "No Highway in the Sky",
+            genre: "Romance",
+            release_date: "2004-09-06T20:47:53Z",
+            director: "Arleyne Livett",
+            actor: "Ty Arnoud",
+            rating: 9.0,
+            duration_minutes: 61,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Ruble",
+            description:
+              "Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.\n\nProin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.\n\nAenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.",
+          },
+          {
+            movie_title: "Great Muppet Caper, The",
+            genre: "Romance",
+            release_date: "2018-08-02T19:55:10Z",
+            director: "Leesa Lissemore",
+            actor: "Filmore Benham",
+            rating: 8.5,
+            duration_minutes: 71,
+            budget: "Peso",
+            box_office_revenue: "Peso",
+            description:
+              "Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\n\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",
+          },
+          {
+            movie_title: "Hobbit, The",
+            genre: "Drama",
+            release_date: "2012-07-15T14:48:05Z",
+            director: "Syd Soden",
+            actor: "Billie Larrat",
+            rating: 4.0,
+            duration_minutes: 62,
+            budget: "Rupee",
+            box_office_revenue: "Shekel",
+            description:
+              "Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.\n\nIn hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.\n\nAliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.",
+          },
+          {
+            movie_title: "Trench Road (Juoksuhaudantie)",
+            genre: "Action",
+            release_date: "2012-06-02T10:57:10Z",
+            director: "Dulce Huxster",
+            actor: "Ernaline Dymock",
+            rating: 9.0,
+            duration_minutes: 166,
+            budget: "Peso",
+            box_office_revenue: "Peso",
+            description:
+              "Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.\n\nIn sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.\n\nSuspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.",
+          },
+          {
+            movie_title: "Bewitched (Alter Ego)",
+            genre: "Action",
+            release_date: "2014-08-25T04:21:38Z",
+            director: "Dollie Cluderay",
+            actor: "Lily Weiner",
+            rating: 5.9,
+            duration_minutes: 95,
+            budget: "Peso",
+            box_office_revenue: "Peso",
+            description:
+              "Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.",
+          },
+          {
+            movie_title: "Women, The",
+            genre: "Romance",
+            release_date: "2014-10-27T16:12:56Z",
+            director: "Lillian Cockayne",
+            actor: "Rafi Verny",
+            rating: 3.2,
+            duration_minutes: 187,
+            budget: "Zloty",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.\n\nPellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.",
+          },
+          {
+            movie_title: "Loved Ones, The",
+            genre: "Horror",
+            release_date: "2007-09-30T21:29:40Z",
+            director: "Monti Slyme",
+            actor: "Reidar Fearfull",
+            rating: 9.1,
+            duration_minutes: 158,
+            budget: "Peso",
+            box_office_revenue: "Ariary",
+            description:
+              "Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.\n\nIn quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.\n\nMaecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.",
+          },
+          {
+            movie_title: "Eleventh Year, The (Odinnadtsatyy) ",
+            genre: "Comedy",
+            release_date: "2007-03-04T09:39:33Z",
+            director: "Ferrel Cowlam",
+            actor: "Essa Bottjer",
+            rating: 1.8,
+            duration_minutes: 156,
+            budget: "Euro",
+            box_office_revenue: "Euro",
+            description:
+              "Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.",
+          },
+          {
+            movie_title:
+              "Screwed in Tallinn (Torsk på Tallinn - En liten film om ensamhet)",
+            genre: "Romance",
+            release_date: "2014-10-27T06:37:59Z",
+            director: "Clayson Gecke",
+            actor: "Winifred Kobpac",
+            rating: 5.6,
+            duration_minutes: 166,
+            budget: "Naira",
+            box_office_revenue: "Rupiah",
+            description:
+              "Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.\n\nMauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.\n\nNullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.",
+          },
+          {
+            movie_title:
+              "Deceptive Practice: The Mysteries and Mentors of Ricky Jay",
+            genre: "Romance",
+            release_date: "2003-02-05T06:40:58Z",
+            director: "Gabriell Rooms",
+            actor: "Dominique Janikowski",
+            rating: 1.0,
+            duration_minutes: 71,
+            budget: "Krona",
+            box_office_revenue: "Krona",
+            description:
+              "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.\n\nVestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.\n\nDuis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.",
+          },
+          {
+            movie_title:
+              "Milka - A Film About Taboos (Milka - elokuva tabuista)",
+            genre: "Horror",
+            release_date: "2005-06-25T03:20:16Z",
+            director: "Stefania Peagram",
+            actor: "Shalna Ahlf",
+            rating: 5.8,
+            duration_minutes: 143,
+            budget: "Peso",
+            box_office_revenue: "Rupiah",
+            description:
+              "Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.",
+          },
+          {
+            movie_title: "Eddie Murphy Raw",
+            genre: "Romance",
+            release_date: "2021-10-16T03:17:44Z",
+            director: "Kevan Reams",
+            actor: "Eirena Stearn",
+            rating: 6.1,
+            duration_minutes: 126,
+            budget: "Rupiah",
+            box_office_revenue: "Peso",
+            description:
+              "Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.\n\nFusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\n\nSed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.",
+          },
+          {
+            movie_title: "Went the Day Well?",
+            genre: "Comedy",
+            release_date: "2000-04-15T14:54:39Z",
+            director: "Antonie Kenset",
+            actor: "Aubrey Keesman",
+            rating: 6.4,
+            duration_minutes: 91,
+            budget: "Ruble",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.",
+          },
+          {
+            movie_title: "Rob the Mob",
+            genre: "Action",
+            release_date: "2014-08-19T22:41:36Z",
+            director: "Jone Ebbrell",
+            actor: "Corrinne Swinfon",
+            rating: 2.4,
+            duration_minutes: 155,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Krone",
+            description:
+              "Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.\n\nCurabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",
+          },
+          {
+            movie_title: "Ghost Ship, The",
+            genre: "Drama",
+            release_date: "2000-09-11T17:04:40Z",
+            director: "Carlin Butter",
+            actor: "Stormy Sturte",
+            rating: 3.3,
+            duration_minutes: 227,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Shekel",
+            description:
+              "Sed ante. Vivamus tortor. Duis mattis egestas metus.\n\nAenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.\n\nQuisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.",
+          },
+          {
+            movie_title: "Rat",
+            genre: "Comedy",
+            release_date: "2019-01-17T10:04:35Z",
+            director: "Kelli Antonowicz",
+            actor: "Alphonse Arp",
+            rating: 4.4,
+            duration_minutes: 234,
+            budget: "Peso",
+            box_office_revenue: "Dollar",
+            description:
+              "Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.\n\nInteger ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.",
+          },
+          {
+            movie_title: "To End All Wars",
+            genre: "Action",
+            release_date: "2018-12-09T04:00:45Z",
+            director: "Rhianna Vaen",
+            actor: "Kayley Schoffel",
+            rating: 4.7,
+            duration_minutes: 96,
+            budget: "Real",
+            box_office_revenue: "Koruna",
+            description:
+              "Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.\n\nCras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.\n\nProin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.",
+          },
+          {
+            movie_title: "Letter from Siberia",
+            genre: "Horror",
+            release_date: "2020-06-04T22:22:37Z",
+            director: "Benedetto Ferran",
+            actor: "Tatiania Giacobo",
+            rating: 6.1,
+            duration_minutes: 74,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Sol",
+            description:
+              "Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.\n\nQuisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.",
+          },
+          {
+            movie_title: "Private Lessons (Élève libre)",
+            genre: "Action",
+            release_date: "2019-01-15T22:26:30Z",
+            director: "Wilfred Perche",
+            actor: "Emmy Antonazzi",
+            rating: 9.0,
+            duration_minutes: 177,
+            budget: "Peso",
+            box_office_revenue: "Peso",
+            description:
+              "Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.",
+          },
+          {
+            movie_title: "Sun on the Horizon",
+            genre: "Romance",
+            release_date: "2003-01-23T18:13:06Z",
+            director: "Clotilda Curmi",
+            actor: "Floyd Mityashev",
+            rating: 5.9,
+            duration_minutes: 136,
+            budget: "Ringgit",
+            box_office_revenue: "Naira",
+            description:
+              "Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.\n\nFusce consequat. Nulla nisl. Nunc nisl.",
+          },
+          {
+            movie_title: "Taking of Pelham One Two Three, The",
+            genre: "Drama",
+            release_date: "2022-02-24T16:39:13Z",
+            director: "Tyrus Izkoveski",
+            actor: "Marin Pogson",
+            rating: 3.2,
+            duration_minutes: 172,
+            budget: "Ruble",
+            box_office_revenue: "Sol",
+            description:
+              "Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.\n\nCum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.\n\nEtiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.",
+          },
+          {
+            movie_title: "Sheep Has Five Legs, The (Le mouton à cinq pattes)",
+            genre: "Horror",
+            release_date: "2014-07-27T11:49:34Z",
+            director: "Mathian O'Callaghan",
+            actor: "Mattie Shackleton",
+            rating: 5.2,
+            duration_minutes: 184,
+            budget: "Franc",
+            box_office_revenue: "Naira",
+            description:
+              "Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.\n\nPraesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.\n\nMorbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.",
+          },
+          {
+            movie_title: "Senotaji",
+            genre: "Drama",
+            release_date: "2005-12-05T10:41:05Z",
+            director: "Lenci Clausewitz",
+            actor: "Jayme Osbaldstone",
+            rating: 6.8,
+            duration_minutes: 97,
+            budget: "Dollar",
+            box_office_revenue: "Dram",
+            description:
+              "Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.\n\nMauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.\n\nNullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.",
+          },
+          {
+            movie_title: "Tokio Baby",
+            genre: "Romance",
+            release_date: "2010-06-25T22:43:58Z",
+            director: "Alexandrina Everard",
+            actor: "Keefe Briztman",
+            rating: 5.8,
+            duration_minutes: 120,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Dollar",
+            description:
+              "Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.\n\nCurabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.",
+          },
+          {
+            movie_title:
+              "Riding Alone for Thousands of Miles (Qian li zou dan qi)",
+            genre: "Action",
+            release_date: "2019-02-09T00:04:49Z",
+            director: "Winona Castlake",
+            actor: "Jaclin Dybell",
+            rating: 1.7,
+            duration_minutes: 167,
+            budget: "Won",
+            box_office_revenue: "Rupiah",
+            description:
+              "Sed ante. Vivamus tortor. Duis mattis egestas metus.\n\nAenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.",
+          },
+          {
+            movie_title: "Lucky Number Slevin",
+            genre: "Horror",
+            release_date: "2016-09-17T04:34:47Z",
+            director: "Marrissa Twaits",
+            actor: "Grantley Demogeot",
+            rating: 5.4,
+            duration_minutes: 66,
+            budget: "Rupiah",
+            box_office_revenue: "Dollar",
+            description:
+              "Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.",
+          },
+          {
+            movie_title: "Making Contact (a.k.a. Joey)",
+            genre: "Drama",
+            release_date: "2018-05-06T16:33:41Z",
+            director: "Merle Dillow",
+            actor: "Caitrin Jarrelt",
+            rating: 4.7,
+            duration_minutes: 106,
+            budget: "Ringgit",
+            box_office_revenue: "Real",
+            description:
+              "Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.",
+          },
+          {
+            movie_title: "Dune",
+            genre: "Drama",
+            release_date: "2001-01-06T23:31:06Z",
+            director: "Aggie Shevlan",
+            actor: "Ross Fuidge",
+            rating: 5.9,
+            duration_minutes: 147,
+            budget: "Ruble",
+            box_office_revenue: "Peso",
+            description:
+              "Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.",
+          },
+          {
+            movie_title: "Sullivan's Travels",
+            genre: "Action",
+            release_date: "2009-09-20T19:41:25Z",
+            director: "Sari Peter",
+            actor: "Mason Unsworth",
+            rating: 3.3,
+            duration_minutes: 101,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Hryvnia",
+            description:
+              "Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.",
+          },
+          {
+            movie_title: "Do We Really Need the Moon?",
+            genre: "Action",
+            release_date: "2013-04-21T18:27:07Z",
+            director: "Debi Kneaphsey",
+            actor: "Gayelord Flannigan",
+            rating: 9.0,
+            duration_minutes: 85,
+            budget: "Rupiah",
+            box_office_revenue: "Won",
+            description:
+              "Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.\n\nFusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.",
+          },
+          {
+            movie_title: "Crime and Punishment",
+            genre: "Comedy",
+            release_date: "2003-05-01T18:36:19Z",
+            director: "Trumann Folley",
+            actor: "Dylan Peter",
+            rating: 9.3,
+            duration_minutes: 119,
+            budget: "Lempira",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.\n\nFusce consequat. Nulla nisl. Nunc nisl.\n\nDuis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.",
+          },
+          {
+            movie_title: "Psychomania (Death Wheelers, The)",
+            genre: "Romance",
+            release_date: "2020-05-11T22:47:00Z",
+            director: "Brigg Growden",
+            actor: "Colas Osban",
+            rating: 2.4,
+            duration_minutes: 190,
+            budget: "Bolivar",
+            box_office_revenue: "Afghani",
+            description:
+              "Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.\n\nPraesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.",
+          },
+          {
+            movie_title: "Den sommeren jeg fylte 15",
+            genre: "Action",
+            release_date: "2000-08-05T17:47:19Z",
+            director: "Skipp Gourdon",
+            actor: "Denna Landsberg",
+            rating: 7.7,
+            duration_minutes: 220,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Real",
+            description:
+              "Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.\n\nDuis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.",
+          },
+          {
+            movie_title: "Camp",
+            genre: "Drama",
+            release_date: "2012-05-26T16:18:25Z",
+            director: "Raina Rotter",
+            actor: "Candy Curless",
+            rating: 6.7,
+            duration_minutes: 65,
+            budget: "Krona",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+          },
+          {
+            movie_title: "Bathing Beauty",
+            genre: "Horror",
+            release_date: "2004-04-04T16:37:03Z",
+            director: "Tildy Vain",
+            actor: "Meghan Gumley",
+            rating: 5.2,
+            duration_minutes: 122,
+            budget: "Ruble",
+            box_office_revenue: "Euro",
+            description:
+              "Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.\n\nMauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.",
+          },
+          {
+            movie_title: "On Any Sunday",
+            genre: "Comedy",
+            release_date: "2018-12-02T04:32:52Z",
+            director: "Kally Phare",
+            actor: "Clem Jochens",
+            rating: 1.1,
+            duration_minutes: 163,
+            budget: "Sol",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.",
+          },
+          {
+            movie_title: "Magic of Ordinary Days, The",
+            genre: "Romance",
+            release_date: "2022-05-14T01:07:58Z",
+            director: "Brittne Frear",
+            actor: "Nanice Tring",
+            rating: 3.0,
+            duration_minutes: 73,
+            budget: "Real",
+            box_office_revenue: "Euro",
+            description:
+              "Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.\n\nDuis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.\n\nDonec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.",
+          },
+          {
+            movie_title: "Sex and Lucia (Lucía y el sexo)",
+            genre: "Romance",
+            release_date: "2019-03-26T15:20:35Z",
+            director: "Christoforo Colbron",
+            actor: "Amerigo Louw",
+            rating: 3.7,
+            duration_minutes: 166,
+            budget: "Rupiah",
+            box_office_revenue: "Ruble",
+            description:
+              "Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.",
+          },
+          {
+            movie_title: "Fly Me to the Moon",
+            genre: "Horror",
+            release_date: "2020-04-17T17:52:20Z",
+            director: "Laetitia Maffiotti",
+            actor: "Joana Fargie",
+            rating: 5.3,
+            duration_minutes: 92,
+            budget: "Hryvnia",
+            box_office_revenue: "Peso",
+            description:
+              "Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.",
+          },
+          {
+            movie_title: "Pool, The (Swimming Pool - Der Tod feiert mit) ",
+            genre: "Comedy",
+            release_date: "2012-10-17T05:37:51Z",
+            director: "Vachel Cescot",
+            actor: "Maren Dampney",
+            rating: 7.3,
+            duration_minutes: 180,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.",
+          },
+          {
+            movie_title: "Almighty Thor",
+            genre: "Drama",
+            release_date: "2008-07-31T05:15:32Z",
+            director: "Henrieta McIlvenna",
+            actor: "Arvy Di Lucia",
+            rating: 4.2,
+            duration_minutes: 138,
+            budget: "Peso",
+            box_office_revenue: "Euro",
+            description:
+              "Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.",
+          },
+          {
+            movie_title: "Léolo",
+            genre: "Comedy",
+            release_date: "2011-04-05T15:40:06Z",
+            director: "Marsh Gaskamp",
+            actor: "Hyacinth Hellard",
+            rating: 1.5,
+            duration_minutes: 201,
+            budget: "Rial",
+            box_office_revenue: "Kina",
+            description:
+              "Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.",
+          },
+          {
+            movie_title: "Bitter Feast",
+            genre: "Romance",
+            release_date: "2003-11-23T14:00:51Z",
+            director: "Darill Durram",
+            actor: "Vita Scullard",
+            rating: 2.5,
+            duration_minutes: 176,
+            budget: "Rial",
+            box_office_revenue: "Hryvnia",
+            description:
+              "Phasellus in felis. Donec semper sapien a libero. Nam dui.",
+          },
+          {
+            movie_title: "Assault on Precinct 13",
+            genre: "Drama",
+            release_date: "2011-06-06T03:45:16Z",
+            director: "Fremont Pickthorn",
+            actor: "Vic Munro",
+            rating: 5.8,
+            duration_minutes: 114,
+            budget: "Guarani",
+            box_office_revenue: "Rupiah",
+            description:
+              "Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.\n\nMaecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.",
+          },
+          {
+            movie_title:
+              "Marriage of Maria Braun, The (Ehe der Maria Braun, Die)",
+            genre: "Drama",
+            release_date: "2017-05-13T09:10:11Z",
+            director: "Winthrop Blakeway",
+            actor: "Gillie Coultish",
+            rating: 4.9,
+            duration_minutes: 187,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Rupiah",
+            description:
+              "Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.\n\nIn quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.\n\nMaecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.",
+          },
+          {
+            movie_title: "Gumball Rally, The",
+            genre: "Action",
+            release_date: "2006-12-13T15:16:47Z",
+            director: "Cherin Cearley",
+            actor: "Alyss Yourell",
+            rating: 5.9,
+            duration_minutes: 198,
+            budget: "Zloty",
+            box_office_revenue: "Krona",
+            description:
+              "Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.",
+          },
+          {
+            movie_title: "CSNY Déjà Vu",
+            genre: "Horror",
+            release_date: "2021-11-22T07:20:11Z",
+            director: "Darb Ambroz",
+            actor: "Keenan MacCartan",
+            rating: 6.8,
+            duration_minutes: 65,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Zloty",
+            description:
+              "Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\n\nSed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.\n\nPellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.",
+          },
+          {
+            movie_title: "Last Command, The",
+            genre: "Horror",
+            release_date: "2003-11-29T14:02:01Z",
+            director: "Cora Kleinhausen",
+            actor: "Darya Morford",
+            rating: 7.1,
+            duration_minutes: 184,
+            budget: "Koruna",
+            box_office_revenue: "Dollar",
+            description:
+              "Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.",
+          },
+          {
+            movie_title: "Tucker & Dale vs Evil",
+            genre: "Drama",
+            release_date: "2004-09-08T12:52:19Z",
+            director: "Donelle De Malchar",
+            actor: "Lethia Stops",
+            rating: 7.4,
+            duration_minutes: 174,
+            budget: "Krona",
+            box_office_revenue: "Euro",
+            description:
+              "Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.\n\nVestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.",
+          },
+          {
+            movie_title: "Secrets of Jonathan Sperry, The",
+            genre: "Horror",
+            release_date: "2008-04-08T19:51:14Z",
+            director: "Elvyn McIlenna",
+            actor: "Malissia Ketteman",
+            rating: 8.6,
+            duration_minutes: 135,
+            budget: "Ruble",
+            box_office_revenue: "Dollar",
+            description:
+              "Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.\n\nAenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.\n\nCurabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.",
+          },
+          {
+            movie_title: "Separation City",
+            genre: "Comedy",
+            release_date: "2018-09-21T04:50:01Z",
+            director: "Stephanus Comerford",
+            actor: "Ilyssa Jost",
+            rating: 5.0,
+            duration_minutes: 131,
+            budget: "Peso",
+            box_office_revenue: "Peso",
+            description:
+              "Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.\n\nMauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.",
+          },
+          {
+            movie_title: "Coming Down the Mountain",
+            genre: "Romance",
+            release_date: "2022-10-04T00:30:04Z",
+            director: "Jessalin Hardie",
+            actor: "Fernanda Aicken",
+            rating: 5.7,
+            duration_minutes: 240,
+            budget: "Dollar",
+            box_office_revenue: "Rupiah",
+            description:
+              "In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.",
+          },
+          {
+            movie_title: "The Possession of Michael King",
+            genre: "Action",
+            release_date: "2015-07-01T13:55:57Z",
+            director: "Andria Attwool",
+            actor: "Ford Pollok",
+            rating: 8.7,
+            duration_minutes: 157,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.\n\nIn hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.\n\nAliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.",
+          },
+          {
+            movie_title: "Best Boy",
+            genre: "Comedy",
+            release_date: "2009-02-04T20:31:55Z",
+            director: "Russ Shoute",
+            actor: "Binni Mackrell",
+            rating: 5.2,
+            duration_minutes: 164,
+            budget: "Ruble",
+            box_office_revenue: "Lek",
+            description:
+              "Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",
+          },
+          {
+            movie_title: "Lost, Lost, Lost ",
+            genre: "Action",
+            release_date: "2013-10-10T17:42:08Z",
+            director: "Bette-ann Sell",
+            actor: "Rabbi Breacher",
+            rating: 4.6,
+            duration_minutes: 221,
+            budget: "Hryvnia",
+            box_office_revenue: "Peso",
+            description:
+              "Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.\n\nPellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.",
+          },
+          {
+            movie_title: "Doctor at Sea",
+            genre: "Comedy",
+            release_date: "2018-06-28T12:53:56Z",
+            director: "Rand Setchfield",
+            actor: "Wilmette Fetters",
+            rating: 6.7,
+            duration_minutes: 170,
+            budget: "Peso",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.\n\nProin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.",
+          },
+          {
+            movie_title: "Owl and the Pussycat, The",
+            genre: "Comedy",
+            release_date: "2020-01-28T01:42:25Z",
+            director: "Coraline Venart",
+            actor: "Channa Mullett",
+            rating: 3.6,
+            duration_minutes: 85,
+            budget: "Yuan Renminbi",
+            box_office_revenue: "Yuan Renminbi",
+            description:
+              "Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.\n\nNullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.",
+          },
+          {
+            movie_title: "Singing Marine, The",
+            genre: "Romance",
+            release_date: "2011-01-23T15:27:43Z",
+            director: "Harlan Hatherall",
+            actor: "Alvie Bangiard",
+            rating: 3.4,
+            duration_minutes: 240,
+            budget: "Peso",
+            box_office_revenue: "Rupiah",
+            description:
+              "Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.\n\nCurabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.",
+          },
+        ];
+      }
+    </script>
+  </body>
+</html>

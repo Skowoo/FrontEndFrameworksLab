@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Vue templates - v-bind</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <style>
+      #app {
+        display: flex;
+        flex-wrap: wrap;
+        &[v-cloak] {
+          display: none;
+        }
+      }
+      section {
+        width: 400px;
+        margin: 1rem;
+        > div {
+          margin-bottom: 2rem;
+        }
+      }
+      section#style {
+        > div {
+          padding: 1rem;
+        }
+      }
+      .bg-sky-magenta {
+        background-color: #c46bae;
+        color: white;
+      }
+      .bg-amaranth-pink {
+        background-color: #eda4bd;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- https://vuejs.org/guide/essentials/template-syntax#attribute-bindings -->
+    <!-- https://vuejs.org/guide/essentials/class-and-style#binding-inline-styles -->
+    <!-- https://vuejs.org/guide/essentials/class-and-style#binding-html-classes -->
+    <div
+      id="app"
+      v-cloak
+    >
+      <h1 style="width: 100%">Bindowanie atrybutów html z użyciem Vue.js</h1>
+      <section>
+        <h2>Podstawowe</h2>
+        <div style="display: flex; flex-direction: column">
+          <h3><code>href</code></h3>
+          <div>Aktualny link to: {{ basic.currentLink }}</div>
+          <button
+            @click="basic.currentLink = basic.currentLink === basic.wseiLink ? basic.aghLink : basic.wseiLink"
+          >
+            Zmień link na {{ basic.currentLink === basic.wseiLink ?
+            basic.aghLink : basic.wseiLink }}
+          </button>
+          <!-- v-bind: directive allows us to bind any html attribute.
+              Below example ilustrates href attribute binding -->
+          <a
+            v-bind:href="basic.currentLink"
+            target="_blank"
+            >Kliknij link</a
+          >
+          <!-- shortcut syntax for v-bind is :
+              Also in attribute value instead of vue instace data we can place and expression:
+            -->
+          <a
+            :href="basic.currentLink === basic.wseiLink ? basic.aghLink : basic.wseiLink"
+            >Kliknij link
+          </a>
+        </div>
+        <div>
+          <h3><code>src</code></h3>
+          <img
+            :src="`https://picsum.photos/id/${basic.imageId}/400`"
+            style="width: 100%"
+          />
+          <button
+            @click="basic.imageId++"
+            class="btn btn-dark my-2"
+          >
+            Zmień
+          </button>
+        </div>
+        <div>
+          <h3><code>placeholder</code></h3>
+          <input
+            type="text"
+            :placeholder="basic.placeholder"
+          />
+        </div>
+        <div>
+          <h3><code>disabled</code></h3>
+          <select :disabled="basic.isDisabled">
+            <option>Option 1</option>
+            <option>Option 2</option>
+            <option>Option 3</option>
+          </select>
+          <div>
+            <button
+              @click="basic.isDisabled = !basic.isDisabled"
+              class="btn btn-dark my-2"
+            >
+              {{ basic.isDisabled ? 'OFF' : 'ON' }}
+            </button>
+          </div>
+        </div>
+        <div>
+          <h3><code>type</code></h3>
+          <input
+            :type="basic.type"
+            :value="basic.type === 'number' ? 123 : '2024-01-01'"
+          />
+          <div>
+            <button
+              @click="basic.type = basic.type === 'number' ? 'date' : 'number' "
+              class="btn btn-dark my-2"
+            >
+              {{ basic.type === 'number' ? 'NUMBER > DATE' : 'DATE > NUMBER' }}
+            </button>
+          </div>
+        </div>
+      </section>
+      <section id="style">
+        <h2>Zaawansowane <code>style</code></h2>
+        <div :style="`background-color:${style.color}`">string literal</div>
+        <div :style="{ 'background-color' : style.colors[count+1] }">
+          object binding with prop name
+        </div>
+        <div :style="{ 'backgroundColor' : style.colors[count+2] }">
+          object binding with camelCase prop name
+        </div>
+        <div :style="style.obj1">
+          <span style="color: white">data object</span>
+        </div>
+        <div
+          style="color: white"
+          :style="{ 'background-color': '#89CFF0' }"
+        >
+          static and dynamic merging
+        </div>
+        <div
+          :style="[style.obj1, { height: `${divHeight}px`, 'border-radius': `${5+count*5}px` }, { transition:
+        'all 0.25s ease', 'background-color': 'white', 'border': '1px solid red' }]"
+        >
+          array with object binding (style prop merging)
+        </div>
+      </section>
+
+      <section id="css">
+        <div>
+          <h2>Zaawansowane <code>class</code></h2>
+          <label
+            >Wpisz co najmniej 10 znaków...
+            <!-- class bidning with expression that evaluates to class attribute value as plain text  -->
+            <input
+              value="text"
+              class="form-control"
+              :class="css.hasError ? `text-white bg-danger` : null"
+              style="border: 1px solid black"
+              @input="e => css.hasError = e.target.value.length < 10"
+            />
+          </label>
+        </div>
+        <!-- class bidning with object attribute expressions that evaluate to particulat css class names.
+            Each object attribute name will became css class name once value evaluates to truthy value.
+           -->
+        <div
+          class="p-2"
+          :class="{ 'text-white': css.hasError, 'bg-info': css.hasError }"
+          style="border: 1px solid #000"
+        >
+          nazwy klass css z obiektu (inline)
+        </div>
+        <div
+          class="p-2"
+          :class="{ [cssClass2]: true }"
+          style="border: 2px solid #7c606b"
+        >
+          nazwa klasy css z wartości tekstowej (data / computed)
+        </div>
+        <div
+          class="p-2"
+          :class="cssClass1"
+          style="border: 2px solid #7c606b"
+        >
+          nazwy class z atrybutów obiektu (data / computed)
+        </div>
+        <div
+          class="p-2"
+          :class="['text-white','bg-info', cssClass2]"
+          style="border: 2px solid #7c606b"
+        >
+          bindowanie tablicy elementów typu string (każdy element to 1 klasa
+          css)
+        </div>
+        <div
+          class="p-2"
+          :class="[cssClass1,{ 'text-info': true }]"
+          style="border: 2px solid #7c606b"
+        >
+          tablica elementów typu obiekt
+        </div>
+        <div
+          class="p-2"
+          :class="[cssClass1,'text-danger']"
+          style="border: 2px solid #7c606b"
+        >
+          Jako tablica mieszana (object / string)
+        </div>
+      </section>
+
+      <section>
+        <h2>Zaawansowane <code>input value</code></h2>
+        <!-- use v-bind directive to bind instance attribute values with html element attributes-->
+        <div>
+          <label class="form-label"
+            >Jednokierunkowe (z zewnątrz do środka)</label
+          >
+          <!-- one way data binding for input: instance data will influence input value  -->
+          <input
+            class="form-control"
+            :value="input.val1"
+            type="text"
+          />
+        </div>
+        <div>
+          <label class="form-label"
+            >Dwukierunkowe z użyciem obsługi zdarzenia</label
+          >
+          <!-- two way data binding for input:
+           instace data will be entered as input value
+           and input value change will sync back to vue instance data -->
+          <input
+            class="form-control"
+            :value="input.val2"
+            @input="e => input.val2 = e.target.value"
+          />
+        </div>
+        <button
+          @click="input.val1 = 'WSEI'"
+          class="btn btn-dark my-3"
+        >
+          Zmień wartość na 'WSEI'
+        </button>
+        <button
+          @click="input.val1 = 'AGH'"
+          class="btn btn-dark mb-3"
+        >
+          Zmień wartość na 'AGH'
+        </button>
+        <div>Wartość input1: {{ input.val1 }}</div>
+        <div>Wartość input2: {{ input.val2 }}</div>
+      </section>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const vm = Vue.createApp({
+        mounted() {
+          setInterval(() => {
+            const seconds = new Date().getSeconds();
+            this.basic.placeholder = new Date().getSeconds();
+            this.style.color = this.style.colors[this.count];
+            if (this.count === 5) {
+              this.count = 0;
+            } else this.count++;
+          }, 500);
+        },
+        data() {
+          const wseiLink = "https://wsei.edu.pl";
+          const aghLink = "https://agh.edu.pl";
+          return {
+            count: 0,
+            basic: {
+              wseiLink,
+              aghLink,
+              currentLink: wseiLink,
+              imageId: 10,
+              placeholder: null,
+              isDisabled: true,
+              type: "number",
+            },
+            style: {
+              colors: [
+                "#d9e5d6",
+                "#00a7e1",
+                "#77c3c3",
+                "#eddea4",
+                "#f7a072",
+                "#fb9e5a",
+                "#ff9b42",
+              ],
+              color: "#B91372",
+              obj1: {
+                "background-color": "#B91372",
+                height: "80px",
+              },
+            },
+            css: {
+              hasError: true,
+              active: true,
+              colorClass: "",
+            },
+            input: {
+              val1: "wartość początkowa",
+              val2: "AbCdEfGh...",
+            },
+          };
+        },
+        computed: {
+          divHeight() {
+            return 60 + this.count * 10;
+          },
+          cssClass1() {
+            return {
+              "bg-sky-magenta": this.css.hasError,
+              "bg-amaranth-pink": !this.css.hasError,
+            };
+          },
+          cssClass2() {
+            return this.css.hasError ? "text-danger" : "text-black";
+          },
+        },
+        methods: {},
+      }).mount("#app");
+    </script>
+  </body>
+</html>

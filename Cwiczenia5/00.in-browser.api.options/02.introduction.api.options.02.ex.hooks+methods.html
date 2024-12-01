@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Vue basics - options api</title>
+    <style>
+      #app {
+        /* https://vuejs.org/api/built-in-directives.html#v-cloak */
+        &[v-cloak] {
+          display: none;
+        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        .clock {
+          font-size: 3rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- https://vuejs.org/api/built-in-directives.html#v-cloak -->
+    <div
+      id="app"
+      v-cloak
+    >
+      <div class="clock">{{ hh }}:{{ mm }}:{{ss}}</div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      // Exercise: Enclose previous excercise component related logic into vue instance options
+      const vm = Vue.createApp({
+        // Using mounted hook for timer initialization
+        // https://vuejs.org/guide/essentials/lifecycle.html
+        // https://vuejs.org/api/options-lifecycle.html#mounted
+        mounted() {
+          // https://developer.mozilla.org/en-US/docs/Web/API/Window/setInterval
+          this.timerHandle = setInterval(() => this.setTime(), 1000);
+          // set initial time
+          this.setTime();
+        },
+        // On unmouted releasing timer
+        // https://vuejs.org/api/options-lifecycle.html#unmounted
+        unmounted() {
+          // release timer resources
+          clearTimeout(timerHandle);
+        },
+        data() {
+          return {
+            //
+            timerHandle: null,
+            hh: "00",
+            mm: "00",
+            ss: "00",
+          };
+        },
+        // https://vuejs.org/guide/essentials/computed.html
+        // https://vuejs.org/api/options-state.html#computed
+        computed() {
+          return `${hh}:${mm}:${ss}`;
+        },
+        // https://vuejs.org/api/options-state.html#methods
+        methods: {
+          setTime() {
+            const date = new Date();
+            // refering internal attributes (defined in data) with this. prefix.
+            this.hh = `${this.formatTimePart(date.getHours())}`;
+            this.mm = `${this.formatTimePart(date.getMinutes())}`;
+            this.ss = `${this.formatTimePart(date.getSeconds())}`;
+          },
+          formatTimePart(num) {
+            return `00${num}`.slice(-2);
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

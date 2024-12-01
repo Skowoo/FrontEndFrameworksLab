@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Vue basics - options api</title>
+    <style>
+      #app {
+        background-color: green;
+      }
+      #app1 {
+        background-color: rosybrown;
+      }
+      #app2 {
+        background-color: mediumslateblue;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- root element that will "hold" root component instance -->
+    <div id="app">
+      <!-- component template -->
+      <p>{{ message }}</p>
+      <p>{{ message }}</p>
+      <p>{{ message }}</p>
+      <p>{{ message }}</p>
+      <p>{{ message }}</p>
+    </div>
+    <!-- root element that will "hold" root component instance -->
+    <div id="app1">
+      <!-- component template -->
+      <p>{{ message }}</p>
+      <p>{{ message }}</p>
+      <p>{{ message }}</p>
+    </div>
+    <!-- root element that will "hold" root component instance -->
+    <div id="app2">
+      <!-- component template -->
+      <p>{{ message }}</p>
+      <p>{{ message }}</p>
+    </div>
+
+    <!-- include vue library reference -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      // This example demostrace how to create vue instance in browser without additional build steps.
+      // Vue root component instance creation and mouting
+      // https://vuejs.org/guide/essentials/application#in-dom-root-component-template
+      const vm = Vue.createApp({
+        // https://vuejs.org/api/options-state.html#data
+        data() {
+          return {
+            message: "Hello world!",
+          };
+        },
+      }).mount("#app");
+
+      // Creating multiple instances with same options (logic)
+      const vm1 = createMessageApp("#app1");
+      const vm2 = createMessageApp("#app2");
+
+      let count = 0;
+      setInterval(() => {
+        count++;
+        // referring vue root instance attributes from "outside" of component
+        vm.message += ` ${count},`;
+        vm1.message += ` ${count},`;
+        vm2.message += ` ${count},`;
+      }, 1000);
+
+      function createMessageApp(target) {
+        // enclose app creation logic inside function for requse
+        const vm = Vue.createApp({
+          data() {
+            return {
+              message: "Hello world!",
+            };
+          },
+        }).mount(target);
+
+        return vm;
+      }
+
+      // podzielić na cześci:
+      // 1. Montowanie instancji + wyświetlanie wartości (interpolacja)
+      //    a. łączenie wartości
+      //    b. wstawianie wartości w różnych miejscach
+      // 2. Zewnętrzne modyfikowanie modelu spoza instancji (setInterval): schemat model (object) => szablon / widok => render
+      // 3. Multiplikowanie instancji
+      // 4. Ćwiczenie: Modyfikowanie modelu po kliknięciu
+    </script>
+  </body>
+</html>

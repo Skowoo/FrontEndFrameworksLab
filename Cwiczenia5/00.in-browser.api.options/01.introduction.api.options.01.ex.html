@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Vue basics - options api</title>
+    <style></style>
+  </head>
+  <body>
+    <!-- root element that will "hold" root component instance -->
+    <div id="app">
+      <!-- Vue instance template -->
+      <p>{{ hh }}:{{ mm }}:{{ss}}</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      // Excercise:
+      // Using template text interpolation display live updated time formatted as HH:mm:ss
+
+      const vm = Vue.createApp({
+        data() {
+          return {
+            // create "placeholders" for time parts
+            // hours
+            hh: "00",
+            // minutes
+            mm: "00",
+            // seconds
+            ss: "00",
+          };
+        },
+      }).mount("#app");
+
+      setInterval(() => {
+        // each second read current date and time and set time placeholders
+        const date = new Date();
+        vm.hh = `${formatTimePart(date.getHours())}`;
+        vm.mm = `${formatTimePart(date.getMinutes())}`;
+        vm.ss = `${formatTimePart(date.getSeconds())}`;
+      }, 1000);
+
+      /**
+       * Format time part as NN (01,02,03...)
+       */
+      function formatTimePart(num) {
+        return `00${num}`.slice(-2);
+      }
+    </script>
+  </body>
+</html>

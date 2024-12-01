@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue templates - v-on</title>
+    <style>
+      button,
+      a {
+        display: block;
+        float: none;
+        width: 200px;
+        height: 80px;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- https://vuejs.org/guide/essentials/event-handling.html -->
+    <!-- https://vuejs.org/api/built-in-directives.html#v-on -->
+    <div id="app" v-cloak>
+      <!-- Diverse ways of event handling syntax in vue.js -->
+      <!-- 1. Fully qualified v-on directive and function reference. 
+              Function handleClickRaw be called with event object as parameter - like in classic DOM click event. -->
+      <button v-on:click="handleClickRaw">Button 1</button>
+      <!-- 2. v-on shortcut @ with and function reference -->
+      <button @click="handleClickRaw">Button 1a</button>
+      <!-- 3. Function call (executed directly after click) -->
+      <button @click="handleClick('Przycisk drugi')">Button 2</button>
+      <!-- 4. Function call within arrow function (with ability to pass event parameter) -->
+      <button @click="evt => handleClick('Przycisk trzeci', evt)">
+        Button 3
+      </button>
+      <!-- 5. Evaluating expression directly inside @click handler (no extra method requried)-->
+      <button @click="count++; buttonText = `Kliknięto mnie: ${count}`">
+        {{ buttonText ? buttonText : 'Kliknij mnie' }}
+      </button>
+
+      <a href="https://wsei.edu.pl" @click="handleHref">WSEI</a>
+      <!-- event modifier example: it this case will prevent default navigation once link clicked. -->
+      <a href="https://wsei.edu.pl" @click.prevent="handleHref">WSEI Prevent</a>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const vm = Vue.createApp({
+        data() {
+          return {
+            count: 0,
+            buttonText: "",
+          };
+        },
+        methods: {
+          handleClickRaw(evt) {
+            alert(`Klinięto:  ${evt.target.textContent}`);
+          },
+          handleClick(message, evt) {
+            const evtText = evt?.target?.textContent;
+            alert(`Kliknięto: ${message}${evtText ? `(${evtText})` : ""}`);
+          },
+          handleHref(evt) {
+            alert(evt.target.href);
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

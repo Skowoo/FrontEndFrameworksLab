@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Vue templates - if</title>
+    <style>
+      #app {
+        &[v-cloak] {
+          display: none;
+        }
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      button {
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+      .rect {
+        width: 300px;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: dimgray;
+        color: white;
+        font-size: 1.5rem;
+        margin-bottom: 1px;
+      }
+
+      .red {
+        background-color: #c11b17;
+      }
+
+      .green {
+        background-color: green;
+      }
+
+      .blue {
+        background-color: royalblue;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- https://vuejs.org/guide/essentials/conditional -->
+    <div id="app">
+      <h1 style="width: 100%">v-if directive syntax</h1>
+      <div>
+        <h2>Standalone <code>v-if</code> conditions:</h2>
+        <button @click="condition = !condition">Click to toggle</button>
+        <div
+          class="rect green"
+          v-if="condition"
+        >
+          TRUE
+        </div>
+        <div
+          class="rect red"
+          v-if="!condition"
+        >
+          FALSE
+        </div>
+      </div>
+      <div>
+        <h2><code>v-if</code> with <code>v-else</code></h2>
+        <button style="visibility: hidden">placeholder</button>
+        <div
+          class="rect green"
+          v-if="condition1"
+          @click="condition1 = false"
+        >
+          Click me
+        </div>
+        <div
+          class="rect red"
+          v-else
+          @click="condition1 = true"
+        >
+          Click me
+        </div>
+      </div>
+      <div>
+        <h2>
+          <code>v-if</code> directive with <code>v-else-if</code> and
+          <code>v-else</code>:
+        </h2>
+        <button @click="toggleColor">Click to toggle color</button>
+        <div
+          class="rect red"
+          v-if="color === 'red'"
+        >
+          CZERWONY
+        </div>
+        <div
+          class="rect green"
+          v-else-if="color === 'green'"
+        >
+          ZIELONY
+        </div>
+        <div
+          class="rect blue"
+          v-else-if="color === 'blue'"
+        >
+          NIEBIESKI
+        </div>
+        <div
+          class="rect"
+          v-else
+        >
+          NIEZDEFINIOWANY
+        </div>
+      </div>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const vm = Vue.createApp({
+        data() {
+          return {
+            condition: true,
+            condition1: false,
+            color: "blue", // red / green / blue
+          };
+        },
+        methods: {
+          toggleColor() {
+            if (this.color === "red") {
+              this.color = "green";
+            } else if (this.color === "green") {
+              this.color = "blue";
+            } else if (this.color === "blue") {
+              this.color = null;
+            } else {
+              this.color = "red";
+            }
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
